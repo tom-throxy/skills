@@ -1,0 +1,10 @@
+{
+  "name": "pr",
+  "version": "0.1.0",
+  "description": "Make PRs cheap to review: a strict comment pass, a short structured description, a terse summary for the user, and optional stacking.",
+  "author": {
+    "name": "Tom Titcombe"
+  },
+  "license": "MIT",
+  "keywords": ["pull-request", "code-review", "comments", "stacked-prs"]
+}

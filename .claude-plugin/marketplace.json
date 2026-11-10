@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "tom-skills",
+  "description": "Personal Claude Code skills, grouped into installable plugins.",
+  "owner": {
+    "name": "Tom Titcombe"
+  },
+  "plugins": [
+    {
+      "name": "pr",
+      "source": "./plugins/pr",
+      "description": "Make PRs cheap to review: a strict comment pass, a short structured description, a terse summary for the user, and optional stacking.",
+      "category": "development"
+    }
+  ]
+}
