@@ -9,7 +9,7 @@
     {
       "name": "pr",
       "source": "./plugins/pr",
-      "description": "Make PRs cheap to review: a strict comment pass, a short structured description, a terse summary for the user, and optional stacking.",
+      "description": "Ship features end to end: design questioning while planning, blind design self-review, strict comment cleanup, reviewer-friendly PR descriptions and stacking.",
       "category": "development"
     }
   ]

@@ -13,13 +13,13 @@ Classify every changed file, then group the files into PRs. Order the PRs bottom
 3. **Keep stacks small.** Most stacks have 1, 2 or 3 PRs, not counting the generated PR. Too many PRs is its own review burden: each one needs context loaded, and changes ripple through the stack.
 4. **Ask before going further.** A non-generated PR may still run into the thousands of changed lines while it could be split further along a logical seam. In that case, propose the extra split to the user and wait for an answer before restructuring. Show each proposed PR's scope and rough line count.
 
-Moving the generated source and output apart can leave lower PRs failing CI. It can also break the main branch if a lower PR merges before the generated PR. When that happens, say so in each affected PR's "Deployment & follow-up" section, for example: "Merge together with #125 (generated); `main` will not build with this PR alone." Repeat it in the user's "Needs you" list.
+Moving the generated source and output apart can leave lower PRs failing CI. It can also break the main branch if a lower PR merges before the generated PR. When that happens, say so in each affected PR's "Deployment" section, for example: "Merge together with #125 (generated); `main` will not build with this PR alone." Repeat it in the user's "Needs you" list.
 
 ## Restructure the branch
 
 Splitting existing commits into layered branches rewrites history. If the branch is already pushed and shared, or holds other people's commits, confirm with the user first. Never merge a base branch into a child to restack. Rebase instead.
 
-Run the comment pass (prepare-pr step 2) once, across the whole change, before splitting. That keeps the cleanup from being scattered across layers.
+Run the design review and the comment pass (prepare-pr steps 2 and 3) once, across the whole change, before splitting. That way design fixes and comment cleanup are not scattered across layers.
 
 ## Open the stack
 

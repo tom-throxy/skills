@@ -1,6 +1,6 @@
 ---
 name: prepare-pr
-description: Makes a pull request cheap for a human to understand and review. Runs a strict comment pass, writes a short structured PR description (assumptions, mermaid data-flow diagram, API/DB changes, deploy risks, with the full agent write-up collapsed), optionally splits the work into stacked PRs, and gives the user a terse summary with a review-focus list. Use this whenever a PR is about to be opened, created, raised, submitted or pushed for review, whether the user asks ("open a PR", "make a PR", "ship it", "put this up for review", "raise PRs for this") or you decide to open one yourself as part of a larger task. Run it before any `gh pr create` or `gh stack submit`, and when asked to rewrite or tidy an existing PR description.
+description: Makes a pull request cheap for a human to understand and review. For non-trivial changes it runs a blind design review first. Then it runs a strict comment pass, writes a short structured PR description (assumptions, mermaid data-flow diagram, API/DB changes, deploy risks, follow-ups, with the full agent write-up collapsed), optionally splits the work into stacked PRs, and gives the user a terse summary with a review-focus list. Use this whenever a PR is about to be opened, created, raised, submitted or pushed for review, whether the user asks ("open a PR", "make a PR", "ship it", "put this up for review", "raise PRs for this") or you decide to open one yourself as part of a larger task. Run it before any `gh pr create` or `gh stack submit`, and when asked to rewrite or tidy an existing PR description.
 ---
 
 # Prepare PR
@@ -13,15 +13,19 @@ A reviewer's attention is the scarcest resource in the loop. Agents write long, 
 
 - Base branch, commits, and `git diff --stat <base>...HEAD`. Include uncommitted work the user means to ship.
 - **The user's own words about this PR**: the request, the goal, any framing they gave. The title and intro reuse or paraphrase these, because the reviewer often is the user, and their words are how they think about the change.
-- Which decisions the user made and which you made on your own. Your own choices become the assumptions list.
+- Which decisions the user made and which you made on your own. Your own choices become the assumptions list. If `design-grill` left a decision record, it already separates the two, and lists deferred future improvements.
 - Whether the user wants stacked PRs: a direct instruction this session, or a memory or CLAUDE.md rule. If they do, read `references/stacking.md` now and follow it alongside the steps below.
 - A repo PR template (`.github/pull_request_template.md` or similar). If one exists, keep its required sections and checklists, and fit the structure below around them.
 
-### 2. Comment pass
+### 2. Design review
 
-Invoke the `tidy-comments` skill on the branch diff before anything else. If it is unavailable, apply its rules directly: delete every comment that is not brief, neutral, durable and genuinely insightful. Carry any history it moves out of the code (incidents, tickets, measurements) into the PR description.
+For a non-trivial change, invoke the `design-review` skill; it defines what counts as non-trivial. It goes before the comment pass because its fixes can change code. Its outcome feeds the description: agent decisions go into the assumptions, open questions go into "Needs you", and deferred items go into follow-ups. For a trivial change, skip it.
 
-### 3. Write the description
+### 3. Comment pass
+
+Invoke the `tidy-comments` skill on the branch diff. If it is unavailable, apply its rules directly: delete every comment that is not brief, neutral, durable and genuinely insightful. Carry any history it moves out of the code (incidents, tickets, measurements) into the PR description.
+
+### 4. Write the description
 
 Write it to a temporary file and pass it with `--body-file`. This avoids shell-quoting damage to the mermaid and markdown.
 
@@ -45,8 +49,11 @@ Write it to a temporary file and pass it with `--body-file`. This avoids shell-q
 - `POST /v1/orders` - <one line: what changed>
 - `postgres` `orders` - <one line: column added, index dropped, etc.>
 
-### Deployment & follow-up
+### Deployment
 - <risk, manual step, ordering constraint, env var, migration, flag flip, backfill, or post-deploy check, each saying who or what must act>
+
+### Follow-ups
+- <deferred improvement or scope-creep item> - <trigger that makes it due> - <link to ticket or TODO, if captured there>
 
 <details>
 <summary>Agent-generated description</summary>
@@ -74,16 +81,17 @@ Guidance for each section:
   ```
 
 - **API & schema changes**: use the form `` `METHOD /route` - change `` for HTTP, RPC or GraphQL surfaces, and `` `db` `table` - change `` for schemas and migrations. Include breaking changes, new required fields, and changed status codes. Omit the section if nothing changed.
-- **Deployment & follow-up**: anything a human must do or watch. Examples: run a migration before deploy, set a new secret, a deploy-ordering dependency on another service, a feature flag to flip, a backfill, a metric or log line to check after release, a known risk and its blast radius. Name the action plainly; "Set `STRIPE_WEBHOOK_SECRET` in prod before deploy" beats "configuration may be required".
+- **Deployment**: anything a human must do or watch. Examples: run a migration before deploy, set a new secret, a deploy-ordering dependency on another service, a feature flag to flip, a backfill, a metric or log line to check after release, a known risk and its blast radius. Name the action plainly; "Set `STRIPE_WEBHOOK_SECRET` in prod before deploy" beats "configuration may be required".
+- **Follow-ups**: deferred improvements from `design-grill` or `design-review`, and known debt this PR takes on deliberately. Link each to where it is captured, if the codebase tickets or uses TODOs. Omit the section if there are none.
 - **Details block**: this is where the thoroughness goes. Write it fully; it costs the reviewer nothing because it is collapsed. The summary text stays exactly `Agent-generated description`.
 
-### 4. Open the PR
+### 5. Open the PR
 
 Open it with `gh pr create --title ... --body-file <file>`, or `gh pr edit` for an existing PR. Respect the user's choice of draft or ready, base branch, reviewers and labels. Opening a PR publishes the branch, so push only what the user asked to ship.
 
-If a hook blocked `gh pr create` and pointed you here, that is expected. Complete steps 1-3, then re-run the command.
+If a hook blocked `gh pr create` and pointed you here, that is expected. Complete steps 1-4, then re-run the command.
 
-### 5. Report to the user
+### 6. Report to the user
 
 The user may have been away while you worked, and the PR is now theirs to review. Give them a terse briefing in the terminal, shorter than the PR body. Use plain text and ASCII, because mermaid does not render in a terminal.
 
@@ -100,7 +108,7 @@ PR #<n>: <title>
 - <one bullet per change in the diagram: what changed and why>
 
 Needs you:
-- <decisions to confirm, assumptions to check, deploy or post-deploy actions; "Nothing beyond review" if none>
+- <decisions to confirm, open design-review questions and scope-creep choices, assumptions to check, deploy or post-deploy actions; "Nothing beyond review" if none>
 
 Review focus:
 - `path/to/file.ext` `functionOrModule` - <why it deserves attention: core logic, risky edge, assumption encoded here>
