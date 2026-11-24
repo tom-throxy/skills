@@ -4,7 +4,7 @@ Plugins live in `plugins/` and install through the marketplace. Standalone skill
 
 ## Plugins
 
-The `pr` plugin covers shipping a feature end to end, from planning through design review to a reviewer-ready PR.
+The `pr` plugin covers shipping a feature end to end, from planning through design review to a reviewer-ready PR. Its `ship-metrics` skill names, for each change, the metric it should move and when to check it. It then tracks those metrics after merge in a ledger under the agent's home folder (`~/.claude/ship-metrics/` for Claude Code), and checks them off.
 
 Add the marketplace and install the plugin in Claude Code:
 

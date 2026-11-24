@@ -1,7 +1,7 @@
 {
   "name": "pr",
-  "version": "0.1.1",
-  "description": "Ship features end to end: design questioning while planning, blind design self-review, strict comment cleanup, reviewer-friendly PR descriptions and stacking.",
+  "version": "0.2.0",
+  "description": "Ship features end to end: design questioning while planning, blind design self-review, strict comment cleanup, reviewer-friendly PR descriptions and stacking, and ship metrics tracked after merge.",
   "author": {
     "name": "Tom Titcombe"
   },
@@ -12,6 +12,7 @@
     "pull-request",
     "code-review",
     "comments",
-    "stacked-prs"
+    "stacked-prs",
+    "metrics"
   ]
 }

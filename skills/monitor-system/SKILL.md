@@ -30,7 +30,7 @@ The skill is tool-agnostic. Discover what is connected (MCP servers, CLIs such a
 ## Run modes
 
 - **Tick:** the default inside a loop. Cover the window since the last run: new alerts and state changes, new messages in incident and alert channels, new urgent or high tickets, new error groups, recent deploys, and the golden signals of services already flagged. It should be cheap on a quiet system.
-- **Sweep:** a full pass. Run a sweep on the first run of the day, on any one-off invocation, and whenever the last sweep was more than about 20 hours ago. A sweep pulls the golden signals for every service in the profile, compares them to the same window yesterday and on the same weekday last week, projects resource trends, reviews the noise ledger, and prunes state.
+- **Sweep:** a full pass. Run a sweep on the first run of the day, on any one-off invocation, and whenever the last sweep was more than about 20 hours ago. A sweep pulls the golden signals for every service in the profile, compares them to the same window yesterday and on the same weekday last week, projects resource trends, reviews the noise ledger, and prunes state. If the `ship-metrics` skill is installed, a sweep also evaluates the due ship metrics for the repos in the profile, following that skill's step 5. A missed fix metric or a broken guard metric is often the cause of an issue found here, so correlate the two.
 
 ## 0. Load state
 
@@ -142,6 +142,8 @@ Watching: <one line per item, shown only when first raised or when it changes>
 Cleanup:
 - PR <link>: <chore>, expected effect: <e.g. ~40 fewer pages/week>
 - Proposed (UI-only monitor): <monitor>: <exact change>. Approve?
+
+Ship metrics: <checked on this sweep, misses first, in the ship-metrics report format>
 
 Suppressed: <n> noise signals (<top 2 by volume>)
 ```

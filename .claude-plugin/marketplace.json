@@ -9,7 +9,7 @@
     {
       "name": "pr",
       "source": "./plugins/pr",
-      "description": "Ship features end to end: design questioning while planning, blind design self-review, strict comment cleanup, reviewer-friendly PR descriptions and stacking.",
+      "description": "Ship features end to end: design questioning while planning, blind design self-review, strict comment cleanup, reviewer-friendly PR descriptions and stacking, and ship metrics tracked after merge.",
       "category": "development"
     }
   ]

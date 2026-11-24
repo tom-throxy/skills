@@ -52,6 +52,10 @@ Write it to a temporary file and pass it with `--body-file`. This avoids shell-q
 ### Deployment
 - <risk, manual step, ordering constraint, env var, migration, flag flip, backfill, or post-deploy check, each saying who or what must act>
 
+### Ship metrics
+<!-- ship-metrics:v1 -->
+- **m1** <kind> · <metric> · expect <direction and size> (baseline <value over window>) · read <timeline> · <tool> `<query>`
+
 ### Follow-ups
 - <deferred improvement or scope-creep item> - <trigger that makes it due> - <link to ticket or TODO, if captured there>
 
@@ -82,6 +86,7 @@ Guidance for each section:
 
 - **API & schema changes**: use the form `` `METHOD /route` - change `` for HTTP, RPC or GraphQL surfaces, and `` `db` `table` - change `` for schemas and migrations. Include breaking changes, new required fields, and changed status codes. Omit the section if nothing changed.
 - **Deployment**: anything a human must do or watch. Examples: run a migration before deploy, set a new secret, a deploy-ordering dependency on another service, a feature flag to flip, a backfill, a metric or log line to check after release, a known risk and its blast radius. Name the action plainly; "Set `STRIPE_WEBHOOK_SECRET` in prod before deploy" beats "configuration may be required".
+- **Ship metrics**: the metrics agreed during planning, in the `ship-metrics` skill's format, with the marker comment kept so the ledger can be rebuilt from PRs. Omit the section if the plan recorded "No ship metric", or if ship metrics are off for the repo. If they are on and the plan named none for a change in runtime behaviour, propose them now (`ship-metrics` step 2).
 - **Follow-ups**: deferred improvements from `design-grill` or `design-review`, and known debt this PR takes on deliberately. Link each to where it is captured, if the codebase tickets or uses TODOs. Omit the section if there are none.
 - **Details block**: this is where the thoroughness goes. Write it fully; it costs the reviewer nothing because it is collapsed. The summary text stays exactly `Agent-generated description`.
 
@@ -90,6 +95,8 @@ Guidance for each section:
 Open it with `gh pr create --title ... --body-file <file>`, or `gh pr edit` for an existing PR. Respect the user's choice of draft or ready, base branch, reviewers and labels. Opening a PR publishes the branch, so push only what the user asked to ship.
 
 If a hook blocked `gh pr create` and pointed you here, that is expected. Complete steps 1-4, then re-run the command.
+
+Once the PR exists, record its ship metrics in the ledger (`ship-metrics` step 3).
 
 ### 6. Report to the user
 
@@ -102,13 +109,14 @@ PR #<n>: <title>
 - Aim: <what it achieves, one line>
 - How: <mechanism, one line>
 - Changes: <only the kinds that apply: APIs, DB, data flows, logic, user flows; one line each>
+- Ship metrics: <one line each: metric, expected move, when it is read; omit if none>
 
 <ASCII service diagram of the change, new or changed parts marked>
 
 - <one bullet per change in the diagram: what changed and why>
 
 Needs you:
-- <decisions to confirm, open design-review questions and scope-creep choices, assumptions to check, deploy or post-deploy actions; "Nothing beyond review" if none>
+- <decisions to confirm, open design-review questions and scope-creep choices, assumptions to check, ship metrics marked `agreed: pending`, deploy or post-deploy actions; "Nothing beyond review" if none>
 
 Review focus:
 - `path/to/file.ext` `functionOrModule` - <why it deserves attention: core logic, risky edge, assumption encoded here>

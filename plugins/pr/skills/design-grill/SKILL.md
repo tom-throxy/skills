@@ -46,6 +46,8 @@ Typical survivors cover:
 - whether to couple or split;
 - when a deliberate shortcut must be repaid.
 
+If the `ship-metrics` skill is available and on for this repo, the success-metrics question follows its step 2. Propose 1-3 concrete metrics, each with a baseline, an expected size and a timeline, or state why none is needed. Also check its ledger for open metrics that this change would confound.
+
 ## 4. Ask in themed batches
 
 Group the surviving questions into batches of about 2-4 that share a theme, for example "Who it's for and what success looks like", "Data shape and growth", or "Lifespan and future change". Ask the highest-stakes batch first.
@@ -82,6 +84,9 @@ Write a short decision record wherever this codebase keeps planning artefacts: t
 - <decision> - <reason> (user)
 - <default accepted> - <reason> (agent default, accepted)
 - Decided by codebase: <convention followed>
+
+## Ship metrics
+- <metric line in the ship-metrics format, or "No ship metric: <reason>">
 
 ## Future improvements
 - <deferred item> - <why deferred> - <trigger that makes it due>

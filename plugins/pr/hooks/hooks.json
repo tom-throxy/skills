@@ -1,5 +1,5 @@
 {
-  "description": "Routes `gh pr create` through the prepare-pr skill.",
+  "description": "Routes `gh pr create` through the prepare-pr skill, and lists due ship metrics at session start.",
   "hooks": {
     "PreToolUse": [
       {
@@ -8,6 +8,16 @@
           {
             "type": "command",
             "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/gate_pr_create.py\""
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/ship_metrics_due.py\""
           }
         ]
       }
